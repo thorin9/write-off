@@ -1,0 +1,19 @@
+{
+  "framework": "nextjs",
+  "buildCommand": "npm run build",
+  "installCommand": "npm install",
+  "functions": {
+    "src/app/api/upload/parse/route.ts": {
+      "maxDuration": 30
+    },
+    "src/app/api/upload/ocr/route.ts": {
+      "maxDuration": 30
+    },
+    "src/app/api/expenses/analyze/route.ts": {
+      "maxDuration": 60
+    },
+    "src/app/api/chat/route.ts": {
+      "maxDuration": 30
+    }
+  }
+}
