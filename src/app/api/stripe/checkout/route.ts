@@ -34,7 +34,7 @@ export async function GET(_request: NextRequest) {
     // Create or retrieve Stripe customer
     let customerId = dbUser.stripeCustomerId
     if (!customerId) {
-      const customer = await stripe.customers.create({
+      const customer = await getStripe().customers.create({
         email: dbUser.email,
         name: dbUser.name || undefined,
         metadata: { userId: dbUser.id },
@@ -47,7 +47,7 @@ export async function GET(_request: NextRequest) {
     }
 
     // Create checkout session
-    const session = await stripe.checkout.sessions.create({
+    const session = await getStripe().checkout.sessions.create({
       customer: customerId,
       payment_method_types: ['card'],
       mode: 'subscription',

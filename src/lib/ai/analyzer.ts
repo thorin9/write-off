@@ -1,6 +1,6 @@
 import OpenAI from 'openai'
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
+const getOpenAI = () => new OpenAI({ apiKey: process.env.OPENAI_API_KEY || "sk-placeholder" })
 
 export type DeductibilityStatus = 'deductible' | 'likely_deductible' | 'not_deductible' | 'partial'
 
@@ -55,7 +55,7 @@ Analyze this expense for tax deductibility:
 
 Determine the IRS Schedule C category and deductibility status.`
 
-  const response = await openai.chat.completions.create({
+  const response = await getOpenAI().chat.completions.create({
     model: 'gpt-4o',
     messages: [
       { role: 'system', content: SYSTEM_PROMPT },

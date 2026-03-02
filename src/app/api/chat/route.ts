@@ -5,7 +5,7 @@ import OpenAI from 'openai'
 
 export const dynamic = 'force-dynamic'
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
+const getOpenAI = () => new OpenAI({ apiKey: process.env.OPENAI_API_KEY || "sk-placeholder" })
 
 const CHAT_SYSTEM_PROMPT = `You are "Write-Off AI", a friendly and knowledgeable US tax advisor specializing in self-employed, freelance, and 1099 contractor tax deductions. You are grounded in IRS Publication 535 (Business Expenses) and related IRS guidance.
 
@@ -62,7 +62,7 @@ export async function POST(request: NextRequest) {
       ? `${CHAT_SYSTEM_PROMPT}\n\nUser context: This user works as a ${dbUser.occupation}. Tailor your answers to their specific situation when relevant.`
       : CHAT_SYSTEM_PROMPT
 
-    const response = await openai.chat.completions.create({
+    const response = await getOpenAI().chat.completions.create({
       model: 'gpt-4o',
       messages: [
         { role: 'system', content: systemWithContext },
