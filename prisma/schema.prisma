@@ -1,0 +1,90 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id               String         @id @default(cuid())
+  email            String         @unique
+  name             String?
+  avatarUrl        String?
+  occupation       String?
+  industry         String?
+  taxBracket       String? // e.g., "22%", "24%"
+  phone            String?
+  supabaseId       String?        @unique
+  planType         String         @default("free") // "free" | "pro"
+  stripeCustomerId String?
+  onboardingDone   Boolean        @default(false)
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+
+  expenses      Expense[]
+  chatMessages  ChatMessage[]
+  uploadedFiles UploadedFile[]
+}
+
+model Expense {
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  date        DateTime
+  merchant    String
+  amount      Float
+  currency    String  @default("USD")
+  category    String? // IRS Schedule C category
+  description String?
+  notes       String?
+
+  // AI Analysis
+  deductibility String? // "deductible" | "likely_deductible" | "not_deductible" | "partial"
+  confidence    Float? // 0-100
+  aiExplanation String?
+  irsReference  String?
+
+  // Status
+  reviewed Boolean @default(false)
+  source   String  @default("manual") // "manual" | "upload" | "sms" | "ocr"
+
+  uploadedFileId String?
+  uploadedFile   UploadedFile? @relation(fields: [uploadedFileId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@index([date])
+}
+
+model ChatMessage {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role      String // "user" | "assistant"
+  content   String   @db.Text
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+}
+
+model UploadedFile {
+  id       String @id @default(cuid())
+  userId   String
+  user     User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  fileName String
+  fileType String // "pdf" | "csv" | "image"
+  fileUrl  String?
+  status   String  @default("processing") // "processing" | "done" | "error"
+  expenseCount Int @default(0)
+  createdAt DateTime @default(now())
+
+  expenses Expense[]
+
+  @@index([userId])
+}

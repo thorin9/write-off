@@ -1,0 +1,6 @@
+-e 
+.env.local
+.env
+secrets/
+.next/
+node_modules/
