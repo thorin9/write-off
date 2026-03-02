@@ -2,6 +2,8 @@ import { NextRequest } from 'next/server'
 import { analyzeExpense } from '@/lib/ai/analyzer'
 import { prisma } from '@/lib/prisma'
 
+export const dynamic = 'force-dynamic'
+
 type UserWithPhone = {
   id: string
   occupation: string | null

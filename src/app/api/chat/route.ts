@@ -3,6 +3,8 @@ import { createClient } from '@/lib/supabase/server'
 import { prisma } from '@/lib/prisma'
 import OpenAI from 'openai'
 
+export const dynamic = 'force-dynamic'
+
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
 
 const CHAT_SYSTEM_PROMPT = `You are "Write-Off AI", a friendly and knowledgeable US tax advisor specializing in self-employed, freelance, and 1099 contractor tax deductions. You are grounded in IRS Publication 535 (Business Expenses) and related IRS guidance.

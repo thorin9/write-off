@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { prisma } from '@/lib/prisma'
 
+export const dynamic = 'force-dynamic'
+
 // Build a simple HTML-based PDF using browser-friendly approach
 // Returns an HTML report that can be printed to PDF
 export async function GET(request: NextRequest) {

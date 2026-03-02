@@ -4,3 +4,4 @@
 secrets/
 .next/
 node_modules/
+.vercel

@@ -3,6 +3,8 @@ import { createClient } from '@/lib/supabase/server'
 import { prisma } from '@/lib/prisma'
 import Papa from 'papaparse'
 
+export const dynamic = 'force-dynamic'
+
 type RawExpense = {
   date: string
   merchant: string
